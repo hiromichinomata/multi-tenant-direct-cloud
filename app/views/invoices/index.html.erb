@@ -7,7 +7,7 @@
     <tr>
       <th>Title</th>
       <th>Filename</th>
-      <th>Url</th>
+      <th>File Seq</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -17,7 +17,7 @@
       <tr>
         <td><%= invoice.title %></td>
         <td><%= invoice.filename %></td>
-        <td><%= invoice.url %></td>
+        <td><%= invoice.file_seq %></td>
         <td><%= link_to 'Show', invoice %></td>
         <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
         <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -3,9 +3,9 @@
 one:
   title: MyString
   filename: MyString
-  url: MyString
+  file_seq: MyString
 
 two:
   title: MyString
   filename: MyString
-  url: MyString
+  file_seq: MyString

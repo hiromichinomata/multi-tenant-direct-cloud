@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2021_08_22_061306) do
   create_table "invoices", force: :cascade do |t|
     t.string "title", default: "", null: false
     t.string "filename", default: "", null: false
-    t.string "url", default: "", null: false
+    t.string "file_seq", default: "", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
