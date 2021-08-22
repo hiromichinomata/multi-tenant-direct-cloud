@@ -55,7 +55,8 @@ class InvoicesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def invoice_params
-      params.require(:invoice).permit(:title, :filename, :file_seq)
+      param_data = params.require(:invoice).permit(:title)
+      param_data.merge({ filename: request.params[:invoice][:blob].original_filename })
     end
 
     def upload_file
