@@ -1,5 +1,7 @@
 require 'base64'
 
+API_BASE_URL = 'https://api.directcloud.jp'
+
 class InvoicesController < ApplicationController
   before_action :set_invoice, only: [:show, :edit, :update, :destroy]
 
@@ -66,5 +68,32 @@ class InvoicesController < ApplicationController
       data = blob.tempfile.read
       base64_data = Base64.encode64(data)
       # upload file
+    end
+
+    def get_viewer_url(file_seq)
+      url = API_BASE_URL + '/openapp/v1/viewer/create'
+      payload = { file_seq: file_seq }
+      response = Faraday.post(url) do |req|
+        req.headers["Content-Type"] = "application/x-www-form-urlencoded"
+        req.headers["access_token"] = get_access_token
+        req.body = payload
+      end
+      JSON.parse(response.body)
+    end
+
+    def get_access_token
+      url = API_BASE_URL + '/openapi/jauth/token?lang=eng'
+      payload = {
+                  service: ENV['DCB_SERVICE'],
+                  service_key: ENV['DCB_SERVICE_KEY'],
+                  code: ENV['DCB_COMPANY_CODE'],
+                  id: ENV['DCB_SUPERUSER_CODE'],
+                  password: ENV['DCB_PASSWORD']
+                }
+      response = Faraday.post(url) do |req|
+        req.headers["Content-Type"] = "application/x-www-form-urlencoded"
+        req.body = payload.to_query
+      end
+      JSON.parse(response.body)["access_token"]
     end
 end

@@ -1,0 +1,5 @@
+export DCB_SERVICE=''
+export DCB_SERVICE_KEY=''
+export DCB_COMPANY_CODE=''
+export DCB_SUPERUSER_CODE=''
+export DCB_PASSWORD=''
