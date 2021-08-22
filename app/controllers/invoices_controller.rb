@@ -12,6 +12,7 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1
   def show
+    url = get_viewer_url('285870345')
   end
 
   # GET /invoices/new
@@ -71,12 +72,20 @@ class InvoicesController < ApplicationController
     end
 
     def get_viewer_url(file_seq)
+      token = get_access_token
       url = API_BASE_URL + '/openapp/v1/viewer/create'
       payload = { file_seq: file_seq }
-      response = Faraday.post(url) do |req|
-        req.headers["Content-Type"] = "application/x-www-form-urlencoded"
-        req.headers["access_token"] = get_access_token
-        req.body = payload
+
+      conn = Faraday.new do |f|
+        f.response :logger
+      end
+
+      response = conn.post(url) do |req|
+        req.headers = {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "access_token": token
+                      }
+        req.body = URI.encode_www_form(payload)
       end
       JSON.parse(response.body)
     end
