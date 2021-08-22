@@ -23,6 +23,7 @@ class InvoicesController < ApplicationController
 
   # POST /invoices
   def create
+    upload_file
     @invoice = Invoice.new(invoice_params)
 
     if @invoice.save
@@ -34,6 +35,7 @@ class InvoicesController < ApplicationController
 
   # PATCH/PUT /invoices/1
   def update
+    upload_file
     if @invoice.update(invoice_params)
       redirect_to @invoice, notice: 'Invoice was successfully updated.'
     else
