@@ -1,3 +1,5 @@
+require 'base64'
+
 class InvoicesController < ApplicationController
   before_action :set_invoice, only: [:show, :edit, :update, :destroy]
 
@@ -54,5 +56,12 @@ class InvoicesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def invoice_params
       params.require(:invoice).permit(:title, :filename, :url)
+    end
+
+    def upload_file
+      blob = request.params[:invoice][:blob]
+      data = blob.tempfile.read
+      base64_data = Base64.encode64(data)
+      # upload file
     end
 end
