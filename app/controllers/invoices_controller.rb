@@ -1,5 +1,3 @@
-require 'base64'
-
 API_BASE_URL = 'https://api.directcloud.jp'
 
 class InvoicesController < ApplicationController
@@ -27,8 +25,9 @@ class InvoicesController < ApplicationController
 
   # POST /invoices
   def create
-    upload_file
-    @invoice = Invoice.new(invoice_params)
+    file_seq = upload_file
+    params = invoice_params.merge({ file_seq: file_seq })
+    @invoice = Invoice.new(params)
 
     if @invoice.save
       redirect_to @invoice, notice: 'Invoice was successfully created.'
@@ -39,8 +38,9 @@ class InvoicesController < ApplicationController
 
   # PATCH/PUT /invoices/1
   def update
-    upload_file
-    if @invoice.update(invoice_params)
+    file_seq = upload_file
+    params = invoice_params.merge({ file_seq: file_seq })
+    if @invoice.update(params)
       redirect_to @invoice, notice: 'Invoice was successfully updated.'
     else
       render :edit
@@ -66,10 +66,22 @@ class InvoicesController < ApplicationController
     end
 
     def upload_file
-      blob = request.params[:invoice][:blob]
-      data = blob.tempfile.read
-      base64_data = Base64.encode64(data)
-      # upload file
+      token = get_access_token
+      header = {
+                  "access_token": token
+                }
+
+      url = API_BASE_URL + "/openapp/v1/files/upload/#{CGI.escape(ENV['DCB_DIR_NODE'])}"
+      data = params.require(:invoice).permit(:blob)
+      file_path = data[:blob].tempfile.path
+      clnt = HTTPClient.new
+      file_seq = ''
+      File.open(file_path) do |file|
+        payload = { "Filedata" => file }
+        response = clnt.post(url, payload, header)
+        file_seq = JSON.parse(response.body)["file_seq"].to_s
+      end
+      file_seq
     end
 
     def get_viewer_url(file_seq)
