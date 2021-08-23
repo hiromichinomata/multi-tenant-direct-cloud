@@ -87,6 +87,7 @@ GEM
     ffi (1.15.3)
     globalid (0.5.2)
       activesupport (>= 5.0)
+    httpclient (2.8.3)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     listen (3.7.0)
@@ -177,6 +178,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   faraday
+  httpclient
   listen (~> 3.3)
   puma (~> 5.0)
   rails (~> 6.1.4, >= 6.1.4.1)

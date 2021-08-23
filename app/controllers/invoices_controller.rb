@@ -12,7 +12,8 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1
   def show
-    url = get_viewer_url('285870345')
+    @preview_url = ''
+    @preview_url = get_viewer_url(@invoice.file_seq) if @invoice.file_seq.present?
   end
 
   # GET /invoices/new
@@ -75,19 +76,14 @@ class InvoicesController < ApplicationController
       token = get_access_token
       url = API_BASE_URL + '/openapp/v1/viewer/create'
       payload = { file_seq: file_seq }
+      header = {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  "access_token": token
+                }
 
-      conn = Faraday.new do |f|
-        f.response :logger
-      end
-
-      response = conn.post(url) do |req|
-        req.headers = {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "access_token": token
-                      }
-        req.body = URI.encode_www_form(payload)
-      end
-      JSON.parse(response.body)
+      clnt = HTTPClient.new
+      response = clnt.post(url, payload, header)
+      JSON.parse(response.body)["url"]
     end
 
     def get_access_token

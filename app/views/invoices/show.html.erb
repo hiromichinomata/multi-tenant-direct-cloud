@@ -15,5 +15,11 @@
   <%= @invoice.file_seq %>
 </p>
 
+<p>
+  <strong>Preview URL:</strong>
+  <% if @preview_url.present? %>
+    <%= link_to 'プレビュー' , @preview_url, target: "_blank" %>
+  <% end %>
+</p>
 <%= link_to 'Edit', edit_invoice_path(@invoice) %> |
 <%= link_to 'Back', invoices_path %>
