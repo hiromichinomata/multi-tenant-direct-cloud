@@ -1,5 +1,6 @@
 # README
 
-マルチテナントアプリケーションのストレージをDirectCloud-BOXでセキュア化
-
+マルチテナントアプリケーションのストレージをDirectCloud-BOX APIでセキュア化
 Qiitaエンジニアフェスタ用デモアプリ
+
+LICENSE: MIT
